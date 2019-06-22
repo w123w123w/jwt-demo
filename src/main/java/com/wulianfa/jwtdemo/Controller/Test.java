@@ -13,7 +13,7 @@ public class Test {
     public String login(){
         User user=new User();
         user.setId("1");
-        user.setUsername("吴联发");
+        user.setUsername("小明");
         user.setPassword("123456");
         String token = Token.getToken(user);
         return token;
