@@ -1,6 +1,5 @@
 package com.wulianfa.jwtdemo.Controller;
 
-import com.wulianfa.jwtdemo.Annotations.PassToken;
 import com.wulianfa.jwtdemo.Annotations.UserLoginToken;
 import com.wulianfa.jwtdemo.Config.Token;
 import com.wulianfa.jwtdemo.Entity.User;
