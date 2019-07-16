@@ -7,6 +7,8 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.wulianfa.jwtdemo.Annotations.PassToken;
 import com.wulianfa.jwtdemo.Annotations.UserLoginToken;
+import com.wulianfa.jwtdemo.Utils.JwtTokenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,6 +23,10 @@ import java.lang.reflect.Method;
  * @Date 23:40 2019/6/20
  */
 public class AuthenticationInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
@@ -47,7 +53,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         }
         //判断方法上是否有UserLoginToken注解
         if (method.isAnnotationPresent(UserLoginToken.class)) {
-            UserLoginToken annotation = method.getAnnotation(UserLoginToken.class);
+            //方式一
+            /*UserLoginToken annotation = method.getAnnotation(UserLoginToken.class);
             if (annotation.required()) {
                 if (token == null) {
                     throw new RuntimeException("token不存在，请重新登录。");
@@ -68,7 +75,18 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             } catch (JWTVerificationException j) {
                 throw new RuntimeException("401");
             }
-            return true;
+            return true;*/
+            //方式二
+            UserLoginToken annotation = method.getAnnotation(UserLoginToken.class);
+            if (annotation.required()) {
+                if (token == null) {
+                    throw new RuntimeException("token不存在，请重新登录。");
+                }
+            }
+            boolean b = jwtTokenUtil.validateToken(token, "吴联发");
+            if(!b){
+                throw new RuntimeException("token失效。");
+            }
         }
         return true;
     }

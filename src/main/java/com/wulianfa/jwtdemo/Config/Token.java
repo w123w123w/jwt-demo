@@ -14,6 +14,7 @@ public class Token {
         String token = "";
         //withAudience:携带信息 sign:签名方式（密钥是用户密码）
         token = JWT.create().withAudience(user.getId()).sign(Algorithm.HMAC256(user.getPassword()));
+        
         return token;
     }
 }
